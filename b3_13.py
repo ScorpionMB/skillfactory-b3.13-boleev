@@ -2,23 +2,10 @@ import textwrap
 
 class TopLevelTag:
     # ...
-    def __init__(self, tag, toplevel=False, klass=None):
+    def __init__(self, tag):
         self.tag = tag
-        self.toplevel = toplevel
-        # Словарь с атрибутами
-        self.attributs = {}
         # Список внутренних тегов
         self.childrens = []
-        self.attrs = []
-
-        if klass is not None:
-            self.attributs['class'] = ' '.join(klass)
-
-        for attr, val in self.attributs.items():
-            val = val.replace('_', '-')
-            self.attrs.append('%s ="%s"' % (attr, val))
-
-        self.attrs = " ".join(self.attrs)
 
     # Метод для +=
     def __iadd__(self, other):
@@ -28,7 +15,7 @@ class TopLevelTag:
     def __str__(self, *args):
         html = "<%s>" % self.tag
         for child in self.childrens:
-            html += "\n" + textwrap.indent(str(child), "    ")
+            html += "\n" + textwrap.indent(str(child), "   ")
         html += "\n" + "</%s>" % self.tag
         return html
 
@@ -39,12 +26,9 @@ class TopLevelTag:
         return self
 
 class HTML:
-
     # ...
     def __init__(self, output=None):
         self.output = output
-        # Словарь с атрибутами
-        self.attributs = {}
         # Список внутренних тегов
         self.children = []
 
@@ -73,20 +57,18 @@ class HTML:
         html = "<html>"
         # Содержимое
         for child in self.children:
-            html += "\n" + textwrap.indent(str(child), "    ")
+            html += "\n" + textwrap.indent(str(child), "   ")
         # Закрывающий
         html += "\n</html>"
         return html
-
 
 class Tag:
 
     # Объявим метод конструктора
     # klass - кортеж с классами
-    def __init__(self, tag, is_single=False, toplevel=False, klass=None, **kwargs):
+    def __init__(self, tag, is_single=False, klass=None, **kwargs):
         self.tag = tag
         self.is_single = is_single
-        self.toplevel = toplevel
         self.text = ""
 
         # Словарь с атрибутами
@@ -94,7 +76,7 @@ class Tag:
 
         # Список внутренниъ тегов
         self.childrens = []
-        self.attrs = []
+
         # Если есть классы у тега, добавим атрибут class и значение атрибута - элементы кортежа через пробел
         if klass is not None:
             self.attributs['class'] = ' '.join(klass)
@@ -132,7 +114,7 @@ class Tag:
                 # Добавляем код внутренних элементов с новой строки каждый
             for child in self.childrens:
                 # Тут добавим табуляцию к str(child)
-                html += "\n" + textwrap.indent(str(child), "    ")
+                html += "\n" + textwrap.indent(str(child), "   ")
                 # С новой строки закрывающий тег
             html += "\n</{tag}>".format(tag=self.tag)
             return html
