@@ -120,7 +120,7 @@ class Tag:
             return "<{tag} {attrs}/>".format(tag=self.tag, attrs=self.attrs)
         # Если у тега нет внутренних элементов
         elif not self.attrs:
-            return "<{tag}>{text}<{tag}/>".format(tag=self.tag, text=self.text)
+            return "<{tag}>{text}</{tag}>".format(tag=self.tag, text=self.text)
         # Если у тега есть внутренние элементы
         else:
             # Открываем тег
